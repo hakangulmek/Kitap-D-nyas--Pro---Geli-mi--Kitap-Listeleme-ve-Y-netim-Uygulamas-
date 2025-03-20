@@ -1,9 +1,9 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, defineAsyncComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/Auth";
-import loginSchema from "@/validation/login";
 
+const loginSchema = defineAsyncComponent(() => import("@/validation/login"));
 // Form verilerini ve hataları reactive olarak tanımlayalım
 const formData = reactive({
   email: "",

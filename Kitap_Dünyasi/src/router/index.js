@@ -1,19 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
-import RegisterView from "../views/RegisterView.vue";
-import ForgotPassword from "../views/ForgetPassword.vue";
-import ProfileView from "../views/ProfileView.vue";
 import { isAuthenticated } from "@/utils/auth";
 
 const routes = [
-  { path: "/", component: HomeView },
-  { path: "/login", component: LoginView },
-  { path: "/register", component: RegisterView },
-  { path: "/forgot-password", component: ForgotPassword },
+  { path: "/", component: () => import("../views/HomeView.vue") }, // Lazy Load
+  { path: "/login", component: () => import("../views/LoginView.vue") },
+  { path: "/register", component: () => import("../views/RegisterView.vue") },
+  {
+    path: "/forgot-password",
+    component: () => import("../views/ForgetPassword.vue"),
+  },
   {
     path: "/profile",
-    component: ProfileView,
+    component: () => import("../views/ProfileView.vue"),
     meta: { requiresAuth: true }, // Yetkilendirme kontrolü
   },
 ];
