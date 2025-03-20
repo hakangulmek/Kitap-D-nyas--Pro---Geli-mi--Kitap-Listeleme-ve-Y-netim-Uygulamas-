@@ -81,9 +81,6 @@ onUnmounted(() => {
 
         <div class="auth-buttons" v-if="!authStore.user">
           <router-link to="/login" class="login-button">Giriş</router-link>
-          <router-link to="/register" class="register-button"
-            >Kayıt Ol</router-link
-          >
         </div>
         <div class="user-actions" v-else>
           <router-link to="/profile" class="profile-link">
@@ -152,7 +149,6 @@ onUnmounted(() => {
   background-color: #243886;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: sticky;
-  top: 0;
   z-index: 1000;
   width: 100%;
 }
