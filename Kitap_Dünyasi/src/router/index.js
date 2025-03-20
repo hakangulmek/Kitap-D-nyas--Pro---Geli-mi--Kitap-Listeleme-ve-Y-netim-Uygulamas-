@@ -1,19 +1,24 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { isAuthenticated } from "@/utils/auth";
 
+// Sayfa bileşenlerini lazy-load yaparak import etme
+const HomeView = () =>
+  import(/* webpackChunkName: "home" */ "../views/HomeView.vue");
+const LoginView = () =>
+  import(/* webpackChunkName: "auth" */ "../views/LoginView.vue");
+const RegisterView = () =>
+  import(/* webpackChunkName: "auth" */ "../views/RegisterView.vue");
+const ForgetPassword = () =>
+  import(/* webpackChunkName: "auth" */ "../views/ForgetPassword.vue");
+const ProfileView = () =>
+  import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue");
+
 const routes = [
-  { path: "/", component: () => import("../views/HomeView.vue") }, // Lazy Load
-  { path: "/login", component: () => import("../views/LoginView.vue") },
-  { path: "/register", component: () => import("../views/RegisterView.vue") },
-  {
-    path: "/forgot-password",
-    component: () => import("../views/ForgetPassword.vue"),
-  },
-  {
-    path: "/profile",
-    component: () => import("../views/ProfileView.vue"),
-    meta: { requiresAuth: true }, // Yetkilendirme kontrolü
-  },
+  { path: "/", component: HomeView },
+  { path: "/login", component: LoginView },
+  { path: "/register", component: RegisterView },
+  { path: "/forgot-password", component: ForgetPassword },
+  { path: "/profile", component: ProfileView, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
@@ -21,13 +26,15 @@ const router = createRouter({
   routes,
 });
 
-// Global Navigation Guard (Yetkilendirme kontrolü)
-router.beforeEach((to, from, next) => {
+// Yetkilendirme kontrolünü fonksiyon haline getirerek kod tekrarını azaltalım
+function checkAuth(to, from, next) {
   if (to.meta.requiresAuth && !isAuthenticated()) {
-    next("/login"); // Kullanıcı giriş yapmamışsa login sayfasına yönlendir
-  } else {
-    next();
+    return next("/login"); // Giriş yapılmamışsa login sayfasına yönlendir
   }
-});
+  next();
+}
+
+// Global Navigation Guard
+router.beforeEach(checkAuth);
 
 export default router;
