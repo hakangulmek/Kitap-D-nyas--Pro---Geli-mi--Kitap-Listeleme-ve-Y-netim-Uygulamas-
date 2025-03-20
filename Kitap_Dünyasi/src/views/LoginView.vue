@@ -1,8 +1,8 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/Auth";
-import { loginSchema } from "../validation/login";
+import loginSchema from "@/validation/login";
 
 // Form verilerini ve hataları reactive olarak tanımlayalım
 const formData = reactive({
@@ -21,18 +21,65 @@ const isSubmitting = ref(false);
 const router = useRouter();
 const authStore = useAuthStore();
 
-const login = async () => {
-  if (await loginSchema(formData, errors)) {
-    try {
-      isSubmitting.value = true;
-      await authStore.login({ email: formData.email });
-      router.push("/profile");
-    } catch (error) {
-      errors.form = "Giriş yapılırken bir hata oluştu";
-    } finally {
-      isSubmitting.value = false;
-    }
+// Sayfa yüklendiğinde "Beni hatırla" bilgisini kontrol et
+onMounted(() => {
+  const { rememberedEmail } = authStore.initAuth();
+  if (rememberedEmail) {
+    formData.email = rememberedEmail;
+    rememberMe.value = true;
   }
+});
+
+const login = async () => {
+  // Önce hataları temizleyelim
+  errors.email = "";
+  errors.password = "";
+  errors.form = "";
+
+  try {
+    // Form doğrulama
+    await loginSchema.validate(formData, { abortEarly: false });
+
+    // Giriş işlemi başlat
+    isSubmitting.value = true;
+    console.log("Giriş yapılıyor:", formData.email, formData.password);
+
+    const result = await authStore.login({
+      email: formData.email,
+      password: formData.password,
+      remember: rememberMe.value,
+    });
+
+    console.log("Giriş başarılı:", result);
+
+    // Başarılı giriş
+    router.push("/");
+  } catch (error) {
+    console.error("Giriş hatası:", error);
+
+    // Yup doğrulama hataları
+    if (error.inner && error.inner.length) {
+      error.inner.forEach((err) => {
+        if (errors[err.path] !== undefined) {
+          errors[err.path] = err.message;
+        }
+      });
+    }
+    // Store/API hataları
+    else if (error.message) {
+      errors.form = error.message;
+    } else {
+      errors.form = "Giriş yapılamadı. Lütfen tekrar deneyin.";
+    }
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+
+// Form submit işlemi için
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Form gönderimini engelle
+  await login();
 };
 </script>
 
@@ -51,41 +98,45 @@ const login = async () => {
           {{ errors.form }}
         </div>
 
-        <div class="form-group">
-          <label for="email">E-posta *</label>
-          <input
-            id="email"
-            v-model="formData.email"
-            type="email"
-            placeholder="E-posta adresinizi girin"
-          />
-          <p v-if="errors.email" class="field-error">{{ errors.email }}</p>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Şifre *</label>
-          <input
-            id="password"
-            v-model="formData.password"
-            type="password"
-            placeholder="Şifrenizi girin"
-          />
-          <p v-if="errors.password" class="field-error">
-            {{ errors.password }}
-          </p>
-        </div>
-
-        <div class="form-options">
-          <div class="remember-me">
-            <input id="remember" type="checkbox" v-model="rememberMe" />
-            <label for="remember">Beni hatırla</label>
+        <form @submit="handleSubmit">
+          <div class="form-group">
+            <label for="email">E-posta *</label>
+            <input
+              id="email"
+              v-model="formData.email"
+              type="email"
+              placeholder="E-posta adresinizi girin"
+              required
+            />
+            <p v-if="errors.email" class="field-error">{{ errors.email }}</p>
           </div>
-        </div>
 
-        <button @click="login" class="login-button" :disabled="isSubmitting">
-          <span v-if="isSubmitting">Giriş Yapılıyor...</span>
-          <span v-else>Giriş yapın</span>
-        </button>
+          <div class="form-group">
+            <label for="password">Şifre *</label>
+            <input
+              id="password"
+              v-model="formData.password"
+              type="password"
+              placeholder="Şifrenizi girin"
+              required
+            />
+            <p v-if="errors.password" class="field-error">
+              {{ errors.password }}
+            </p>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input id="remember" type="checkbox" v-model="rememberMe" />
+              <label for="remember">Beni hatırla</label>
+            </div>
+          </div>
+
+          <button type="submit" class="login-button" :disabled="isSubmitting">
+            <span v-if="isSubmitting">Giriş Yapılıyor...</span>
+            <span v-else>Giriş Yapın</span>
+          </button>
+        </form>
 
         <div class="form-links">
           <router-link to="/forgot-password" class="forgot-password">
@@ -107,9 +158,8 @@ const login = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 80vh;
   background-color: #f5f5f5;
-  padding: 20px;
 }
 
 .login-card {

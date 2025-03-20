@@ -1,8 +1,14 @@
-import * as Yup from "yup";
+import * as yup from "yup";
 
-export const loginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Geçerli bir email adresi giriniz")
-    .required("Email alanı boş bırakılamaz"),
-  password: Yup.string().required("Şifre alanı boş bırakılamaz"),
+const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Geçerli bir e-posta girin")
+    .required("E-posta zorunludur"),
+  password: yup
+    .string()
+    .min(6, "Şifre en az 6 karakter olmalıdır")
+    .required("Şifre zorunludur"),
 });
+
+export default loginSchema;
