@@ -42,7 +42,6 @@ const login = async () => {
 
     // Giriş işlemi başlat
     isSubmitting.value = true;
-    console.log("Giriş yapılıyor:", formData.email, formData.password);
 
     const result = await authStore.login({
       email: formData.email,
