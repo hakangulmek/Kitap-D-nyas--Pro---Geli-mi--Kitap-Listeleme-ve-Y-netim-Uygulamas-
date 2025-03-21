@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, defineAsyncComponent } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/Auth";
 import loginSchema from "@/validation/login";

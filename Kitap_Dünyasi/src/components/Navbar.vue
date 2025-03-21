@@ -87,7 +87,6 @@ onUnmounted(() => {
             <span class="user-icon">👤</span>
             <span class="profile-text">Hesabım</span>
           </router-link>
-          <button @click="logout" class="logout-button">Çıkış Yap</button>
         </div>
       </div>
 
@@ -131,13 +130,6 @@ onUnmounted(() => {
           class="nav-item mobile-only"
           v-if="authStore.user"
           >Hesabım</router-link
-        >
-        <a
-          href="#"
-          @click.prevent="logout"
-          class="nav-item mobile-only"
-          v-if="authStore.user"
-          >Çıkış Yap</a
         >
       </nav>
     </div>
