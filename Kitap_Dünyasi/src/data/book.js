@@ -1,11 +1,27 @@
-export const books = [
+import tutunamayanlar from "../assets/pictures/tutunamayanlar.jpg";
+import Dune from "../assets/pictures/Dune.jpg";
+import Nutuk from "../assets/pictures/Nutuk.jpg";
+import Steve from "../assets/pictures/Steve.jpg";
+import Sapiens from "../assets/pictures/Sapiens.jpg";
+import YuzuklerinEfendisi from "../assets/pictures/LordofTheRings.jpg";
+import Simyaci from "../assets/pictures/Simyacı.jpg";
+import YeraltindanNotlar from "../assets/pictures/Yeraltı.jpg";
+import BeyazZambaklarUlkesinde from "../assets/pictures/Beyaz.jpg";
+import HarryPotter from "../assets/pictures/Harry.jpg";
+import Ikigai from "../assets/pictures/Ikıgai.jpg";
+import SuCez from "../assets/pictures/SuçveCeza.jpg";
+import ı1984 from "../assets/pictures/ı1984.jpg";
+import KucukPrens from "../assets/pictures/KüçükPrens.jpg";
+import Sefiller from "../assets/pictures/Sefiller.jpg";
+
+const books = [
   {
     id: 1,
     title: "Tutunamayanlar",
     author: "Oğuz Atay",
     description:
       "Türk edebiyatının en önemli eserlerinden biri olan Tutunamayanlar, modern insanın yaşadığı yabancılaşmayı anlatır.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: tutunamayanlar,
     price: 85,
     isFree: false,
     isFavorite: false,
@@ -20,7 +36,7 @@ export const books = [
     author: "Frank Herbert",
     description:
       "Bilim kurgu edebiyatının başyapıtlarından biri olan Dune, uzak bir gelecekte geçen politik, dini ve ekolojik temaları işleyen bir eserdir.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Dune,
     price: 120,
     isFree: false,
     isFavorite: false,
@@ -35,7 +51,7 @@ export const books = [
     author: "Mustafa Kemal Atatürk",
     description:
       "Türk Kurtuluş Savaşı ve Türkiye Cumhuriyeti'nin kuruluş sürecinin anlatıldığı tarihi bir eser.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Nutuk,
     price: 65,
     isFree: true,
     isFavorite: true,
@@ -49,7 +65,7 @@ export const books = [
     title: "Steve Jobs",
     author: "Walter Isaacson",
     description: "Apple'ın kurucusu Steve Jobs'un hayatını anlatan biyografi.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Steve,
     price: 95,
     isFree: false,
     isFavorite: false,
@@ -63,7 +79,7 @@ export const books = [
     title: "Harry Potter ve Felsefe Taşı",
     author: "J.K. Rowling",
     description: "Dünyaca ünlü Harry Potter serisinin ilk kitabı.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: HarryPotter,
     price: 75,
     isFree: false,
     isFavorite: false,
@@ -78,7 +94,7 @@ export const books = [
     author: "Héctor García ve Francesc Miralles",
     description:
       "Uzun ve mutlu yaşamın Japon sırrını anlatan bir kişisel gelişim kitabı.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Ikigai,
     price: 55,
     isFree: false,
     isFavorite: false,
@@ -93,7 +109,7 @@ export const books = [
     author: "George Orwell",
     description:
       "Distopik bir gelecekte geçen, totaliter bir rejimin baskısını anlatan klasik eser.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: ı1984,
     price: 60,
     isFree: false,
     isFavorite: false,
@@ -108,7 +124,7 @@ export const books = [
     author: "Paulo Coelho",
     description:
       "Kişisel efsanesinin peşinden giden bir çobanın yolculuğunu anlatan felsefi roman.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Simyaci,
     price: 45,
     isFree: false,
     isFavorite: false,
@@ -123,7 +139,7 @@ export const books = [
     author: "Yuval Noah Harari",
     description:
       "İnsanlık tarihini ve medeniyetin gelişimini anlatan popüler bilim kitabı.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Sapiens,
     price: 110,
     isFree: false,
     isFavorite: false,
@@ -137,7 +153,7 @@ export const books = [
     title: "Suç ve Ceza",
     author: "Fyodor Dostoyevski",
     description: "Psikolojik derinliği ile ünlü klasik roman.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: SuCez,
     price: 70,
     isFree: true,
     isFavorite: false,
@@ -151,7 +167,7 @@ export const books = [
     title: "Yüzüklerin Efendisi",
     author: "J.R.R. Tolkien",
     description: "Modern fantastik edebiyatın temelini atan epik seri.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: YuzuklerinEfendisi,
     price: 150,
     isFree: false,
     isFavorite: true,
@@ -166,7 +182,7 @@ export const books = [
     author: "Victor Hugo",
     description:
       "19. yüzyıl Fransa'sında geçen, adalet, özgürlük ve sevgiyi anlatan klasik roman.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: Sefiller,
     price: 90,
     isFree: false,
     isFavorite: false,
@@ -176,42 +192,12 @@ export const books = [
     pageCount: 1463,
   },
   {
-    id: 13,
-    title: "Suç ve Ceza",
-    author: "Fyodor Dostoyevski",
-    description:
-      "Bir cinayetin psikolojik ve ahlaki sonuçlarını anlatan klasik roman.",
-    coverImage: "/api/placeholder/200/300",
-    price: 120,
-    isFree: false,
-    isFavorite: false,
-    categoryId: 2,
-    language: "ru",
-    publicationYear: 1866,
-    pageCount: 671,
-  },
-  {
-    id: 14,
-    title: "1984",
-    author: "George Orwell",
-    description:
-      "Totaliter bir rejimde bireyin özgürlük mücadelesini anlatan distopik roman.",
-    coverImage: "/api/placeholder/200/300",
-    price: 75,
-    isFree: false,
-    isFavorite: true,
-    categoryId: 3,
-    language: "en",
-    publicationYear: 1949,
-    pageCount: 328,
-  },
-  {
     id: 15,
     title: "Küçük Prens",
     author: "Antoine de Saint-Exupéry",
     description:
       "Çocuklar ve yetişkinler için hayatın anlamını sorgulayan eşsiz bir eser.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: KucukPrens,
     price: 50,
     isFree: false,
     isFavorite: false,
@@ -226,7 +212,7 @@ export const books = [
     author: "Grigory Petrov",
     description:
       "Finlandiya'nın eğitim ve kültürel gelişimini anlatan ilham verici kitap.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: BeyazZambaklarUlkesinde,
     price: 60,
     isFree: true,
     isFavorite: false,
@@ -241,7 +227,7 @@ export const books = [
     author: "Fyodor Dostoyevski",
     description:
       "Modern bireyin içsel çatışmalarını anlatan felsefi bir roman.",
-    coverImage: "/api/placeholder/200/300",
+    coverImage: YeraltindanNotlar,
     price: 90,
     isFree: false,
     isFavorite: true,
@@ -251,3 +237,4 @@ export const books = [
     pageCount: 192,
   },
 ];
+export default books;
