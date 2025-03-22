@@ -42,11 +42,10 @@ export default {
         return value.title && value.author && value.price && value.imageUrl;
       },
     },
-  },
-  data() {
-    return {
-      isFavorite: false,
-    };
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     truncateDescription(description) {
@@ -61,10 +60,9 @@ export default {
       });
     },
     toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
       this.$emit("toggle-favorite", {
         bookId: this.book.id,
-        isFavorite: this.isFavorite,
+        isFavorite: !this.isFavorite,
       });
     },
     addToCart() {

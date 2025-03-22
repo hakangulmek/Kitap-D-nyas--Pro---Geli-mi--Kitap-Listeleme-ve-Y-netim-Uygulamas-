@@ -12,6 +12,8 @@ const ForgetPassword = () =>
   import(/* webpackChunkName: "auth" */ "../views/ForgetPassword.vue");
 const ProfileView = () =>
   import(/* webpackChunkName: "profile" */ "../views/ProfileView.vue");
+const Favorites = () =>
+  import(/* webpackChunkName: "profile" */ "../views/favoriteView.vue");
 
 const routes = [
   { path: "/", component: HomeView },
@@ -19,6 +21,7 @@ const routes = [
   { path: "/register", component: RegisterView },
   { path: "/forgot-password", component: ForgetPassword },
   { path: "/profile", component: ProfileView, meta: { requiresAuth: true } },
+  { path: "/favorites", component: Favorites },
 ];
 
 const router = createRouter({

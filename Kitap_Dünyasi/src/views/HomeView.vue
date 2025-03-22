@@ -60,6 +60,7 @@
             price: book.price,
             imageUrl: book.coverImage,
           }"
+          :is-favorite="isFavorite(book.id)"
           @toggle-favorite="handleToggleFavorite"
           @add-to-cart="handleAddToCart"
         />
@@ -73,12 +74,19 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
+import { useStore } from "vuex";
+
 import books from "@/data/book";
 import BookCard from "@/components/BookCard.vue";
 
-const handleToggleFavorite = (data) => {
-  console.log(`Kitap ID: ${data.bookId}, Favori: ${data.isFavorite}`);
-  // Burada favorilere ekleme/çıkarma işlemleri yapılabilir
+const store = useStore();
+
+const handleToggleFavorite = (book) => {
+  store.dispatch("favorites/toggleFavorite", book);
+};
+
+const isFavorite = (bookId) => {
+  return store.getters["favorites/isFavorite"](bookId);
 };
 
 const handleAddToCart = (bookId) => {

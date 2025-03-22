@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../store/Auth";
+import { useAuthStore } from "../utils";
 import loginSchema from "@/validation/login";
 // Form verilerini ve hataları reactive olarak tanımlayalım
 const formData = reactive({
