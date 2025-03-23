@@ -215,9 +215,8 @@ const isFavorite = (bookId) => {
   return store.getters["favorites/isFavorite"](bookId);
 };
 
-const handleAddToCart = (bookId) => {
-  console.log(`Sepete eklenen kitap ID: ${bookId}`);
-  // Burada sepete ekleme işlemleri yapılabilir
+const handleAddToCart = (book) => {
+  store.dispatch("cart/addToCart", book.id);
 };
 
 const handleFilterChange = (filters) => {

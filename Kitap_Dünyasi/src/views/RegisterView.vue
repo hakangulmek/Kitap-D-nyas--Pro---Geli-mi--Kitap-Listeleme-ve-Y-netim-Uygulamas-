@@ -1,10 +1,8 @@
 <script setup>
-import { ref, reactive, defineAsyncComponent } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import registerSchema from "@/validation/sign-up";
 
-const registerSchema = defineAsyncComponent(() =>
-  import("@/validation/sign-up")
-);
 // Form verilerini ve hataları reactive olarak tanımlayalım
 const formData = reactive({
   name: "",

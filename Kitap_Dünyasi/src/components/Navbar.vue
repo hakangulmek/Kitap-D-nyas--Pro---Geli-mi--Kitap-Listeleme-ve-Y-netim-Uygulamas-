@@ -1,15 +1,31 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import useAuthStore from "@/utils/index";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
+const store = useStore();
 const authStore = useAuthStore();
 const router = useRouter();
 const isMenuOpen = ref(false);
 const searchQuery = ref("");
 
+// Favori sayısını hesaplayan computed property
+const favoriteCount = computed(() => {
+  return store.state.favorites.favorites.length;
+});
+
+// Sepet sayacı
+const cartCount = computed(() => {
+  return store.state.cart.items.length;
+});
+
 const favorite = () => {
   router.push("/favorites");
+};
+
+const cart = () => {
+  router.push("/basket");
 };
 
 const toggleMenu = () => {
@@ -89,11 +105,17 @@ onUnmounted(() => {
               }}</span>
             </div>
           </router-link>
-          <button class="favorite-button" @click="favorite">
-            <span class="heart-icon">❤</span>
+          <button class="action-button favorite-button" @click="favorite">
+            <i class="fas fa-heart"></i>
+            <span v-if="favoriteCount > 0" class="count-badge">{{
+              favoriteCount
+            }}</span>
           </button>
-          <button class="basket-button" @click="basket">
-            <span class="basket-icon">❤</span>
+          <button class="action-button cart-button" @click="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span v-if="cartCount > 0" class="count-badge">{{
+              cartCount
+            }}</span>
           </button>
         </div>
       </div>
@@ -305,41 +327,55 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-.favorite-button {
+.action-button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   background-color: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 6px 12px;
-  border-radius: 20px;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
-.favorite-button:hover {
+.action-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.heart-icon {
+.favorite-button i {
   color: #ff4081;
-  font-size: 1.1rem;
-  animation: pulse 1.5s infinite;
+  font-size: 1.2rem;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+.cart-button i {
+  color: #ffc107;
+  font-size: 1.2rem;
+}
+
+.count-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4081;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cart-button .count-badge {
+  background-color: #ffc107;
+  color: #243886;
 }
 
 .main-nav {

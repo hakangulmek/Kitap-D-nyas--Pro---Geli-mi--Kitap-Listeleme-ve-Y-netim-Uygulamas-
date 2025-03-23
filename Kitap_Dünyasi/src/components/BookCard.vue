@@ -106,7 +106,7 @@ export default {
         isFavorite: !this.isFavorite,
       });
     },
-    addToCart() {
+    addToCart(book) {
       this.$emit("add-to-cart", this.book.id);
     },
   },
