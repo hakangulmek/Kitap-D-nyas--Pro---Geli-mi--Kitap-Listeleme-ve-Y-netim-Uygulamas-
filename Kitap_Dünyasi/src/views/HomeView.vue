@@ -46,11 +46,53 @@
 
     <!-- Kitap Kartları ve Filtre Bölümü -->
     <div class="book-content-container">
+      <!-- Sol kenar çubuğu - Görünüm, Sıralama ve Filtre -->
+      <div class="sidebar">
+        <!-- Yeni Görünüm Modu Komponenti -->
+        <ViewModeToggle
+          :initial-mode="viewMode"
+          @update:view-mode="viewMode = $event"
+        />
+
+        <!-- Sıralama Komponenti -->
+        <SortingOptions
+          :initial-sort="sortConfig.sortBy"
+          :initial-direction="sortConfig.direction"
+          @sort-changed="handleSortChange"
+        />
+
+        <!-- Filtre Komponenti -->
+        <BookFilter :books="books" @filter-changed="handleFilterChange" />
+      </div>
+
+      <!-- Kitap Kartları -->
       <div class="book-cards-container">
         <h2>Tüm Kitaplar</h2>
-        <div class="book-cards-grid">
+
+        <!-- Grid Görünümü -->
+        <div v-if="viewMode === 'grid'" class="book-cards-grid">
           <BookCard
-            v-for="book in filteredBooks"
+            v-for="book in sortedAndFilteredBooks"
+            :key="book.id"
+            :book="{
+              id: book.id,
+              title: book.title,
+              author: book.author,
+              description:
+                book.description || 'Kitap açıklaması bulunmamaktadır.',
+              price: book.price,
+              imageUrl: book.coverImage,
+            }"
+            :is-favorite="isFavorite(book.id)"
+            @toggle-favorite="handleToggleFavorite"
+            @add-to-cart="handleAddToCart"
+          />
+        </div>
+
+        <!-- Liste Görünümü -->
+        <div v-else class="book-list">
+          <BookListItem
+            v-for="book in sortedAndFilteredBooks"
             :key="book.id"
             :book="{
               id: book.id,
@@ -67,11 +109,6 @@
           />
         </div>
       </div>
-
-      <!-- Filtre Komponenti -->
-      <div class="filter-sidebar">
-        <BookFilter :books="books" @filter-changed="handleFilterChange" />
-      </div>
     </div>
   </div>
 </template>
@@ -87,13 +124,26 @@ import { ref, computed } from "vue";
 import books from "@/data/book";
 import BookCard from "@/components/BookCard.vue";
 import BookFilter from "@/components/FilterForm.vue";
+import SortingOptions from "@/components/SortingOptins.vue";
+import ViewModeToggle from "@/components/ViewModToogle.vue"; // Yeni eklenen görünüm modu komponenti
+// Yeni eklenen liste görünümü komponenti
 
 const store = useStore();
+
+// Görünüm modu state'i
+const viewMode = ref("grid"); // Varsayılan olarak grid görünümü
+
 const activeFilters = ref({
   categories: [],
   languages: [],
   yearRange: { min: null, max: null },
   pageRange: { min: 0, max: 1000 },
+});
+
+// Sıralama yapılandırması
+const sortConfig = ref({
+  sortBy: "title",
+  direction: "asc",
 });
 
 // Filtreleme işlemi
@@ -137,6 +187,25 @@ const filteredBooks = computed(() => {
   });
 });
 
+// Sıralanmış ve filtrelenmiş kitaplar
+const sortedAndFilteredBooks = computed(() => {
+  const books = [...filteredBooks.value];
+
+  const { sortBy, direction } = sortConfig.value;
+  const multiplier = direction === "asc" ? 1 : -1;
+
+  return books.sort((a, b) => {
+    if (sortBy === "price") {
+      return (a.price - b.price) * multiplier;
+    } else if (sortBy === "publicationYear") {
+      return (a.publicationYear - b.publicationYear) * multiplier;
+    } else {
+      // title
+      return a.title.localeCompare(b.title, "tr") * multiplier;
+    }
+  });
+});
+
 const handleToggleFavorite = (book) => {
   store.dispatch("favorites/toggleFavorite", book);
 };
@@ -152,6 +221,10 @@ const handleAddToCart = (bookId) => {
 
 const handleFilterChange = (filters) => {
   activeFilters.value = filters;
+};
+
+const handleSortChange = (sort) => {
+  sortConfig.value = sort;
 };
 </script>
 
@@ -267,12 +340,18 @@ const handleFilterChange = (filters) => {
   height: 12px;
 }
 
-/* Kitap Kartları ve Filtre Alanı */
+/* Kitap Kartları ve Filtre Alanı - Yeniden düzenlendi */
 .book-content-container {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 300px 1fr;
   gap: 30px;
   margin-top: 60px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .book-cards-container {
@@ -286,11 +365,11 @@ const handleFilterChange = (filters) => {
   margin-top: 30px;
 }
 
-.filter-sidebar {
-  align-self: start;
-  position: sticky;
-  top: 20px;
-  padding-left: 10px;
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 30px;
 }
 
 /* Responsive Tasarım */
@@ -299,7 +378,7 @@ const handleFilterChange = (filters) => {
     grid-template-columns: 1fr;
   }
 
-  .filter-sidebar {
+  .sidebar {
     order: -1;
     position: static;
     margin-bottom: 30px;
