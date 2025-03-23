@@ -8,9 +8,8 @@ const router = useRouter();
 const isMenuOpen = ref(false);
 const searchQuery = ref("");
 
-const logout = () => {
-  authStore.logout();
-  router.push("/login");
+const favorite = () => {
+  router.push("/favorites");
 };
 
 const toggleMenu = () => {
@@ -84,9 +83,17 @@ onUnmounted(() => {
         </div>
         <div class="user-actions" v-else>
           <router-link to="/profile" class="profile-link">
-            <span class="user-icon">👤</span>
+            <div class="user-avatar">
+              <span class="user-initial">{{
+                authStore.user.name ? authStore.user.name[0].toUpperCase() : "K"
+              }}</span>
+            </div>
             <span class="profile-text">Hesabım</span>
           </router-link>
+          <button class="favorite-button" @click="favorite">
+            <span class="heart-icon">❤</span>
+            <span class="favorite-text">Favorilerim</span>
+          </button>
         </div>
       </div>
 
@@ -266,30 +273,72 @@ onUnmounted(() => {
   align-items: center;
   color: white;
   text-decoration: none;
-  gap: 5px;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: background-color 0.2s;
 }
 
-.user-icon {
-  font-size: 1.2rem;
+.profile-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #7e57c2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.user-initial {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .profile-text {
   font-weight: 500;
 }
 
-.logout-button {
-  background-color: #e74c3c;
+.favorite-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
   color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
-.logout-button:hover {
-  background-color: #c0392b;
+.favorite-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.heart-icon {
+  color: #ff4081;
+  font-size: 1.1rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .main-nav {
