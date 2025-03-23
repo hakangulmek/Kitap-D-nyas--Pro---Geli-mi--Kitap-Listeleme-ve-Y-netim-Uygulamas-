@@ -9,7 +9,15 @@
       <p class="book-description">
         {{ truncateDescription(book.description) }}
       </p>
-      <p class="book-price">{{ formatPrice(book.price) }} TL</p>
+      <p class="book-price">
+        {{ convertedPrice }}
+        <select v-model="selectedCurrency" @change="fetchExchangeRate">
+          <option value="TRY">TRY</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+        </select>
+      </p>
       <div class="book-actions">
         <button
           class="favorite-button"
@@ -47,17 +55,50 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      selectedCurrency: "TRY",
+      exchangeRates: 1,
+    };
+  },
+  computed: {
+    convertedPrice() {
+      if (!this.book.price || isNaN(this.book.price)) {
+        return "0.00";
+      }
+      return (this.book.price * this.exchangeRates).toFixed(2);
+    },
+  },
   methods: {
     truncateDescription(description) {
       return description.length > 100
         ? description.substring(0, 100) + "..."
         : description;
     },
+    async fetchExchangeRate() {
+      try {
+        const response = await fetch(
+          `https://api.exchangerate-api.com/v4/latest/TRY`
+        );
+        const data = await response.json();
+        this.exchangeRates = data.rates[this.selectedCurrency] || 1;
+      } catch (error) {
+        console.error("Döviz kuru alınırken hata oluştu:", error);
+        this.exchangeRates = 1; // Hata alırsa default olarak 1 kullan
+      }
+    },
     formatPrice(price) {
+      if (isNaN(price)) return "0.00";
       return price.toLocaleString("tr-TR", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
+    },
+    computed: {
+      convertedPrice() {
+        let price = parseFloat(this.book.price) || 0;
+        return (price * this.exchangeRates).toFixed(2);
+      },
     },
     toggleFavorite() {
       this.$emit("toggle-favorite", {
