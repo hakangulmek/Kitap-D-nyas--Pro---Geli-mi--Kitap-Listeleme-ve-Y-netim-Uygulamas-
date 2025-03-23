@@ -88,11 +88,12 @@ onUnmounted(() => {
                 authStore.user.name ? authStore.user.name[0].toUpperCase() : "K"
               }}</span>
             </div>
-            <span class="profile-text">Hesabım</span>
           </router-link>
           <button class="favorite-button" @click="favorite">
             <span class="heart-icon">❤</span>
-            <span class="favorite-text">Favorilerim</span>
+          </button>
+          <button class="basket-button" @click="basket">
+            <span class="basket-icon">❤</span>
           </button>
         </div>
       </div>

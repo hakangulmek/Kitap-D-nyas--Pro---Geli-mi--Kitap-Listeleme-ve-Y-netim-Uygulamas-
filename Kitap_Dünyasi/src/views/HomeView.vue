@@ -118,10 +118,10 @@ const filteredBooks = computed(() => {
     // Yayın yılı filtresi
     const minYear = activeFilters.value.yearRange.min;
     const maxYear = activeFilters.value.yearRange.max;
-    if (minYear && book.publishYear < minYear) {
+    if (minYear && book.publicationYear < minYear) {
       return false;
     }
-    if (maxYear && book.publishYear > maxYear) {
+    if (maxYear && book.publicationYear > maxYear) {
       return false;
     }
 
@@ -282,7 +282,7 @@ const handleFilterChange = (filters) => {
 .book-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  gap: 50px;
   margin-top: 30px;
 }
 
@@ -290,6 +290,7 @@ const handleFilterChange = (filters) => {
   align-self: start;
   position: sticky;
   top: 20px;
+  padding-left: 10px;
 }
 
 /* Responsive Tasarım */
