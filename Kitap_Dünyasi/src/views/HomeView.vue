@@ -126,6 +126,7 @@ import BookCard from "@/components/BookCard.vue";
 import BookFilter from "@/components/FilterForm.vue";
 import SortingOptions from "@/components/SortingOptins.vue";
 import ViewModeToggle from "@/components/ViewModToogle.vue"; // Yeni eklenen görünüm modu komponenti
+import BookListItem from "@/views/BookListItem.vue";
 // Yeni eklenen liste görünümü komponenti
 
 const store = useStore();
