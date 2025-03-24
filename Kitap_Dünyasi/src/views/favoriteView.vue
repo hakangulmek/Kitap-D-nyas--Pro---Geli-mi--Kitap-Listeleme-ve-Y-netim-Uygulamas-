@@ -55,7 +55,7 @@ export default defineComponent({
       console.log(`Sepete eklenen kitap ID: ${bookId}`);
       // Sepete ekleme işlemleri burada yapılabilir
     };
-
+    console.log("favorites", favoriteBooks);
     return {
       favoriteBooks,
       handleToggleFavorite,

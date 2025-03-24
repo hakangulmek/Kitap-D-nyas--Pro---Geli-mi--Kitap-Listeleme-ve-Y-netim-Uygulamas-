@@ -80,16 +80,15 @@ const store = useStore();
 const shipping = 29.9;
 
 const cartBooks = computed(() => {
-  const books = store.getters["cart/cartBooks"];
-  console.log("Sepetteki kitaplar:", books);
+  const books = store.getters["books/cartBooks"];
   return books;
 });
 
-const cartItemCount = computed(() => store.getters["cart/cartItemCount"]);
-const cartTotal = computed(() => store.getters["cart/cartTotal"]);
+const cartItemCount = computed(() => store.getters["books/cartItemCount"]);
+const cartTotal = computed(() => store.getters["books/cartTotal"]);
 
 const removeFromCart = (bookId) => {
-  store.dispatch("cart/removeFromCart", bookId);
+  store.dispatch("books/removeFromCart", bookId);
 };
 </script>
 

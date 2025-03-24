@@ -17,7 +17,7 @@ const favoriteCount = computed(() => {
 
 // Sepet sayacı
 const cartCount = computed(() => {
-  return store.getters["cart/cartItemCount"];
+  return store.getters["books/cartItemCount"];
 });
 
 const favorite = () => {

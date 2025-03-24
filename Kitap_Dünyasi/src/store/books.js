@@ -1,5 +1,4 @@
 import books from "@/data/book";
-import { set } from "lodash";
 
 export default {
   namespaced: true,
@@ -49,17 +48,43 @@ export default {
       commit("CLEAR_CART");
     },
     initializeBooks({ commit }) {
-      // Dummy data'yı state.books içine yükle
-      commit("setBooks", books);
+      commit("setBooks", books); // books data'sını state'e yükle
     },
     async getBookById({ state }, bookId) {
-      console.log("Available books in state:", state.books); // Mevcut kitapları kontrol edin
-      const book = state.books.find((book) => book.id === parseInt(bookId));
-      if (!book) {
-        console.error(`Book with ID ${bookId} not found.`);
-        throw new Error(`Book with ID ${bookId} not found.`);
+      try {
+        // books array'inden kitabı bul
+        const book = books.find((b) => b.id === parseInt(bookId));
+        if (!book) return null;
+
+        // Kitap verilerini aynı favorilerdeki gibi döndür
+        return {
+          id: book.id,
+          title: book.title,
+          author: book.author,
+          imageUrl: book.coverImage,
+          category: book.category || "Kategori Belirtilmemiş",
+          description: book.description,
+          price: book.price,
+          isbn: book.isbn,
+          pageCount: book.pageCount,
+          publisher: book.publisher,
+          publishDate: book.publishDate,
+        };
+      } catch (error) {
+        console.error("Kitap detayları getirilirken hata oluştu:", error);
+        return null;
       }
-      return book;
+    },
+    async fetchBookDetails({ commit }, bookId) {
+      try {
+        // API'den kitap detaylarını getir
+        const response = await fetch(`/api/books/${bookId}`); // API endpoint'inize göre ayarlayın
+        const bookDetails = await response.json();
+        return bookDetails;
+      } catch (error) {
+        console.error("Kitap detayları getirilirken hata oluştu:", error);
+        return null;
+      }
     },
   },
   getters: {
@@ -91,14 +116,19 @@ export default {
         return total + (book.price || 0);
       }, 0);
     },
-    getRelatedBooks: (state) => (currentBook) => {
-      if (!currentBook || !currentBook.categoryId) return [];
-      // Aynı kategoriye sahip kitapları döndür
-      return state.books.filter(
-        (book) =>
-          book.categoryId === currentBook.categoryId &&
-          book.id !== currentBook.id
-      );
+    getRelatedBooks: (state) => (bookId) => {
+      const currentBook = state.books.find((book) => book.id === bookId);
+      if (!currentBook) return [];
+
+      // Aynı yazarın veya kategorinin kitaplarını getir
+      return state.books
+        .filter(
+          (book) =>
+            (book.author === currentBook.author ||
+              book.category === currentBook.category) &&
+            book.id !== bookId
+        )
+        .slice(0, 4); // İlk 4 ilgili kitabı göster
     },
   },
 };

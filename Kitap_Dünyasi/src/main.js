@@ -5,7 +5,7 @@ import router from "./router"; // Eğer Vue Router kullanıyorsan
 import store from "./store"; // Eğer Vuex kullanıyorsan
 
 const app = createApp(App);
-store.dispatch("cart/initializeBooks");
+store.dispatch("books/initializeBooks");
 
 const pinia = createPinia();
 app.use(pinia); // Pinia'yı Vue uygulamasına ekle

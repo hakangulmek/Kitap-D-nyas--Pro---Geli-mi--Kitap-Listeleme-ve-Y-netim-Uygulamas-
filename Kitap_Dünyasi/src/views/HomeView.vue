@@ -225,7 +225,7 @@ const handleAddToCart = (bookId) => {
 
     if (bookExists) {
       console.log("Eklenen kitap:", bookExists.title);
-      store.dispatch("cart/addToCart", bookId);
+      store.dispatch("books/addToCart", bookId);
     } else {
       console.error("Kitap bulunamadı, ID:", bookId);
     }
