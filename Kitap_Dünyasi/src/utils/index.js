@@ -39,7 +39,6 @@ export const useAuthStore = defineStore("auth", {
             }
           }
         } catch (e) {
-          console.error("Kullanıcı verisi okunamadı:", e);
           users = [];
         }
 
@@ -62,9 +61,7 @@ export const useAuthStore = defineStore("auth", {
         // localStorage'a yazma işlemi
         try {
           localStorage.setItem("registeredUser", JSON.stringify(users));
-          console.log("Kullanıcılar kaydedildi:", users);
         } catch (e) {
-          console.error("Kullanıcı kaydedilemedi:", e);
           throw new Error("Kullanıcı kaydedilemedi, lütfen tekrar deneyin");
         }
 
@@ -98,7 +95,6 @@ export const useAuthStore = defineStore("auth", {
         let users = [];
         try {
           const usersData = localStorage.getItem("registeredUser");
-          console.log("Okunan kullanıcı verisi:", usersData);
 
           if (usersData) {
             const parsedData = JSON.parse(usersData);
@@ -107,26 +103,18 @@ export const useAuthStore = defineStore("auth", {
             if (Array.isArray(parsedData)) {
               users = parsedData;
             } else {
-              console.log(
-                "Kullanıcı verisi array değil, array'e dönüştürülüyor"
-              );
               users = [parsedData]; // Tek obje varsa array'e çevir
             }
           }
         } catch (e) {
-          console.error("Kullanıcı verisi okunamadı:", e);
           users = [];
         }
-
-        console.log("Login için kullanıcılar:", users);
-        console.log("Aranan e-posta:", credentials.email);
 
         // Kullanıcıyı bul
         const user = users.find(
           (u) =>
             u.email === credentials.email && u.password === credentials.password
         );
-        console.log("Kullanıcı bulundu mu?", user);
 
         if (user) {
           // Kullanıcı bulundu, şifre hariç bilgileri döndür
@@ -150,7 +138,6 @@ export const useAuthStore = defineStore("auth", {
 
           return response;
         } else {
-          console.error("Giriş için kullanıcı bulunamadı!");
           throw new Error("E-posta veya şifre hatalı!");
         }
       } catch (error) {
@@ -192,9 +179,7 @@ export const useAuthStore = defineStore("auth", {
                 this.setUser(userWithoutPassword);
               }
             }
-          } catch (e) {
-            console.error("Token ile kullanıcı bilgisi çekilemedi:", e);
-          }
+          } catch (e) {}
         }
       }
 

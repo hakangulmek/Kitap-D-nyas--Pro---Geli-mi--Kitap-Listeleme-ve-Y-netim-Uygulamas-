@@ -83,7 +83,6 @@ export default {
         const data = await response.json();
         this.exchangeRates = data.rates[this.selectedCurrency] || 1;
       } catch (error) {
-        console.error("Döviz kuru alınırken hata oluştu:", error);
         this.exchangeRates = 1; // Hata alırsa default olarak 1 kullan
       }
     },
@@ -106,8 +105,11 @@ export default {
         isFavorite: !this.isFavorite,
       });
     },
-    addToCart(book) {
-      this.$emit("add-to-cart", this.book.id);
+    addToCart() {
+      console.log("Sepete eklenen kitap:", this.book.id); // Debug için
+      if (this.book && this.book.id) {
+        this.$emit("add-to-cart", this.book.id);
+      }
     },
   },
 };

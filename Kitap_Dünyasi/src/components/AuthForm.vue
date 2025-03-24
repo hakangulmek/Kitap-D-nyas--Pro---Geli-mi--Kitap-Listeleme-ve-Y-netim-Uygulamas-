@@ -48,13 +48,9 @@ const login = async () => {
       remember: rememberMe.value,
     });
 
-    console.log("Giriş başarılı:", result);
-
     // Başarılı giriş
     router.push("/");
   } catch (error) {
-    console.error("Giriş hatası:", error);
-
     // Yup doğrulama hataları
     if (error.inner && error.inner.length) {
       error.inner.forEach((err) => {

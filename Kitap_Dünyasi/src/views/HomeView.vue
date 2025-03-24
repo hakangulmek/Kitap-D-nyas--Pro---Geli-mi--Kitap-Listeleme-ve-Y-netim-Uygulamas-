@@ -215,8 +215,13 @@ const isFavorite = (bookId) => {
   return store.getters["favorites/isFavorite"](bookId);
 };
 
-const handleAddToCart = (book) => {
-  store.dispatch("cart/addToCart", book.id);
+const handleAddToCart = (bookId) => {
+  console.log("Sepete eklenen kitap ID:", bookId);
+  if (bookId && typeof bookId === "number") {
+    store.dispatch("books/addToCart", bookId);
+  } else {
+    console.error("Geçersiz kitap ID'si:", bookId);
+  }
 };
 
 const handleFilterChange = (filters) => {
