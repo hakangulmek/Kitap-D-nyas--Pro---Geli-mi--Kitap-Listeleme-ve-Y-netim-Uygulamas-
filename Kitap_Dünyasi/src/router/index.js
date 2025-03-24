@@ -16,6 +16,8 @@ const Favorites = () =>
   import(/* webpackChunkName: "profile" */ "../views/favoriteView.vue");
 const BasketBooks = () =>
   import(/* webpackChunkName: "profile" */ "../views/BasketBooks.vue");
+const BookDetail = () =>
+  import(/* webpackChunkName: "book" */ "../views/BookDetail.vue");
 const routes = [
   { path: "/", component: HomeView },
   { path: "/login", component: LoginView },
@@ -24,6 +26,7 @@ const routes = [
   { path: "/profile", component: ProfileView, meta: { requiresAuth: true } },
   { path: "/favorites", component: Favorites },
   { path: "/basket", component: BasketBooks },
+  { path: "/book/:id", component: BookDetail },
 ];
 
 const router = createRouter({

@@ -1,5 +1,5 @@
 <template>
-  <div class="book-card">
+  <div class="book-card" @click="navigateToBookDetail">
     <div class="book-image">
       <img :src="book.imageUrl" :alt="book.title" />
     </div>
@@ -11,7 +11,11 @@
       </p>
       <p class="book-price">
         {{ convertedPrice }}
-        <select v-model="selectedCurrency" @change="fetchExchangeRate">
+        <select
+          v-model="selectedCurrency"
+          @change="fetchExchangeRate"
+          @click.stop
+        >
           <option value="TRY">TRY</option>
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
@@ -21,7 +25,7 @@
       <div class="book-actions">
         <button
           class="favorite-button"
-          @click="toggleFavorite"
+          @click.stop="toggleFavorite"
           :class="{ 'is-favorite': isFavorite }"
         >
           <i
@@ -30,7 +34,7 @@
           ></i>
           <span>Favorilere Ekle</span>
         </button>
-        <button class="add-to-cart-button" @click="addToCart">
+        <button class="add-to-cart-button" @click.stop="addToCart">
           <i class="icon icon-cart"></i>
           <span>Sepete Ekle</span>
         </button>
@@ -51,7 +55,7 @@ export default {
           value.title &&
           value.author &&
           value.price &&
-          value.imageUrl & value &&
+          value.imageUrl &&
           value.id !== undefined &&
           value.id !== null
         );
@@ -70,13 +74,15 @@ export default {
   },
   computed: {
     convertedPrice() {
-      if (!this.book.price || isNaN(this.book.price)) {
-        return "0.00";
-      }
-      return (this.book.price * this.exchangeRates).toFixed(2);
+      let price = parseFloat(this.book.price) || 0;
+      return (price * this.exchangeRates).toFixed(2);
     },
   },
   methods: {
+    navigateToBookDetail() {
+      console.log("Navigating to book with ID:", this.book.id);
+      this.$router.push(`/book/${this.book.id}`);
+    },
     truncateDescription(description) {
       return description.length > 100
         ? description.substring(0, 100) + "..."
@@ -99,12 +105,6 @@ export default {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
-    },
-    computed: {
-      convertedPrice() {
-        let price = parseFloat(this.book.price) || 0;
-        return (price * this.exchangeRates).toFixed(2);
-      },
     },
     toggleFavorite() {
       this.$emit("toggle-favorite", {
@@ -135,6 +135,7 @@ export default {
   height: 100%;
   max-width: 280px;
   margin: 0 auto;
+  cursor: pointer; /* Kitap kartına tıklanabilir görünüm */
 }
 
 .book-card:hover {
