@@ -79,12 +79,6 @@ import { useStore } from "vuex";
 const store = useStore();
 const shipping = 29.9;
 
-// Debug için store durumunu kontrol et
-onMounted(() => {
-  console.log("Sepet durumu:", store.state.cart.items);
-  console.log("Kitaplar:", store.getters["cart/cartBooks"]);
-});
-
 const cartBooks = computed(() => {
   const books = store.getters["cart/cartBooks"];
   console.log("Sepetteki kitaplar:", books);

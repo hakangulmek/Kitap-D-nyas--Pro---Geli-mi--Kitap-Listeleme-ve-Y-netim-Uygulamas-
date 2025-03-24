@@ -47,7 +47,14 @@ export default {
       type: Object,
       required: true,
       validator: (value) => {
-        return value.title && value.author && value.price && value.imageUrl;
+        return (
+          value.title &&
+          value.author &&
+          value.price &&
+          value.imageUrl & value &&
+          value.id !== undefined &&
+          value.id !== null
+        );
       },
     },
     isFavorite: {

@@ -27,5 +27,8 @@ export default {
     isFavorite: (state) => (bookId) => {
       return state.favorites.includes(bookId);
     },
+    favoriteCount: (state) => {
+      return state.favorites.length;
+    },
   },
 };

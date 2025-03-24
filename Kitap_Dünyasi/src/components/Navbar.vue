@@ -12,12 +12,12 @@ const searchQuery = ref("");
 
 // Favori sayısını hesaplayan computed property
 const favoriteCount = computed(() => {
-  return store.state.favorites.favorites.length;
+  return store.getters["favorites/favoriteCount"];
 });
 
 // Sepet sayacı
 const cartCount = computed(() => {
-  return store.state.cart.items.length;
+  return store.getters["cart/cartItemCount"];
 });
 
 const favorite = () => {

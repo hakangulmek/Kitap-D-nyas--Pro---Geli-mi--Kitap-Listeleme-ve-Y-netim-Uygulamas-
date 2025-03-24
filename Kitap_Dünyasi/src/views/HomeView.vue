@@ -216,9 +216,19 @@ const isFavorite = (bookId) => {
 };
 
 const handleAddToCart = (bookId) => {
-  console.log("Sepete eklenen kitap ID:", bookId);
-  if (bookId && typeof bookId === "number") {
-    store.dispatch("books/addToCart", bookId);
+  console.log("Sepete eklenen kitap ID:", bookId, typeof bookId);
+
+  // Kitap ID'sini kontrol edin
+  if (bookId !== null && bookId !== undefined) {
+    // Kitabın varlığını doğrulayın
+    const bookExists = books.find((book) => book.id === bookId);
+
+    if (bookExists) {
+      console.log("Eklenen kitap:", bookExists.title);
+      store.dispatch("cart/addToCart", bookId);
+    } else {
+      console.error("Kitap bulunamadı, ID:", bookId);
+    }
   } else {
     console.error("Geçersiz kitap ID'si:", bookId);
   }
