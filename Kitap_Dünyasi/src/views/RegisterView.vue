@@ -1,9 +1,14 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import registerSchema from "@/validation/sign-up";
 
-// Form verilerini ve hataları reactive olarak tanımlayalım
+// Vuex Store ve Router
+const store = useStore();
+const router = useRouter();
+
+// Form verileri ve hataları reactive olarak tanımlayalım
 const formData = reactive({
   name: "",
   email: "",
@@ -21,7 +26,6 @@ const errors = reactive({
 
 const isSubmitting = ref(false);
 const termsAccepted = ref(false);
-const router = useRouter();
 
 const register = async () => {
   // Hataları temizle
@@ -40,24 +44,15 @@ const register = async () => {
 
     // Kayıt işlemi
     isSubmitting.value = true;
-    console.log("Kayıt bilgileri:", formData);
-
-    // Kullanıcı bilgilerini localStorage'a kaydet
-    localStorage.setItem(
-      "registeredUser",
-      JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      })
-    );
+    await store.dispatch("user/register", {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
 
     // Başarılı bildirim ve yönlendirme
-    setTimeout(() => {
-      isSubmitting.value = false;
-      alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
-      router.push("/login");
-    }, 1000);
+    alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+    router.push("/login");
   } catch (error) {
     console.error("Kayıt hatası:", error);
 
@@ -73,7 +68,7 @@ const register = async () => {
     } else {
       errors.form = "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.";
     }
-
+  } finally {
     isSubmitting.value = false;
   }
 };

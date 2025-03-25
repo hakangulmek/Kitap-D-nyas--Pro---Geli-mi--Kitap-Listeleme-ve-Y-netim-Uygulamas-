@@ -12,23 +12,13 @@
           required
         ></textarea>
       </div>
-      <div class="form-group">
-        <label for="priceInUSD">Fiyat (USD)</label>
-        <input
-          id="priceInUSD"
-          :value="priceInUSD"
-          readonly
-          placeholder="USD fiyatı"
-        />
-      </div>
-      <div class="form-actions">
-        <button type="submit" class="submit-button">Kaydet</button>
-      </div>
     </form>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   props: ["price"],
   data() {
@@ -43,6 +33,7 @@ export default {
     },
   },
   mounted() {
+    // Döviz kuru API'sinden USD kurunu alıyoruz
     fetch("https://api.exchangerate-api.com/v4/latest/TRY")
       .then((response) => response.json())
       .then((data) => {
@@ -50,8 +41,19 @@ export default {
       });
   },
   methods: {
+    ...mapActions("booksEdit", ["updateBookData"]),
     validateAndSubmit() {
       if (this.summary) {
+        // Verileri Vuex mağazasına kaydediyoruz
+        this.updateBookData({
+          step: "additionalInfo",
+          data: {
+            summary: this.summary,
+            priceInUSD: this.priceInUSD,
+          },
+        });
+
+        // Kaydetme işlemi tamamlandıktan sonra bir sonraki adıma geçebiliriz
         this.$emit("next-step");
       }
     },
