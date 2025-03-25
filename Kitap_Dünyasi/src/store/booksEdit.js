@@ -33,9 +33,4 @@ const booksEdit = {
     },
   },
 };
-
-export default createStore({
-  modules: {
-    booksEdit,
-  },
-});
+export default booksEdit;
