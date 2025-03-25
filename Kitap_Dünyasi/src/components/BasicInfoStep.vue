@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
+import store from "@/store";
 
 export default {
   data() {
@@ -53,12 +53,13 @@ export default {
     };
   },
   computed: {
-    // Vuex mağazasından verileri almak için getter'ları kullanıyoruz
     bookFormData() {
-      return this.store.getters.getBookFormData();
+      // Call the getter function
+      return store.getters["booksEdit/getBookFormData"];
     },
     coverImage() {
-      return this.store.getters.getCoverImage();
+      // Call the getter function
+      return store.getters["booksEdit/getCoverImage"];
     },
   },
   mounted() {
@@ -76,14 +77,22 @@ export default {
 
       reader.onload = (e) => {
         this.previewImage = e.target.result;
-        this.store.dispatch("setCoverImage", e.target.result);
+
+        // booksEdit modülündeki updateBookData action'ını çağırıyoruz
+        store.dispatch("booksEdit/updateBookData", {
+          step: "basicInfo",
+          data: {
+            coverImage: e.target.result,
+          },
+        });
       };
 
       reader.readAsDataURL(file);
     },
     validateAndSubmit() {
       if (this.bookName && this.author) {
-        this.store.dispatch("updateBookData", {
+        // booksEdit modülündeki updateBookData action'ını çağırıyoruz
+        this.$store.dispatch("booksEdit/updateBookData", {
           step: "basicInfo",
           data: {
             bookName: this.bookName,
@@ -93,10 +102,6 @@ export default {
         this.$emit("next-step");
       }
     },
-  },
-  setup() {
-    const store = useStore();
-    return { store };
   },
 };
 </script>

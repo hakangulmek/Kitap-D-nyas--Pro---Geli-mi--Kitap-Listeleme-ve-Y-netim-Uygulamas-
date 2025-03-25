@@ -19,7 +19,7 @@ const BasketBooks = () =>
 const BookDetail = () =>
   import(/* webpackChunkName: "book" */ "../views/BookDetail.vue");
 const BooksEdit = () =>
-  import(/* webpackChunkName: "book/edit" */ "../views/BasicInfoStep.vue");
+  import(/* webpackChunkName: "book/edit" */ "../views/Wizard.vue");
 const routes = [
   { path: "/", component: HomeView },
   { path: "/login", component: LoginView },
