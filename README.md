@@ -9,7 +9,7 @@ Bu proje, kullanıcıların kitaplarını listeleyebileceği, favorilere ekleyeb
 ### Gerekli Bağımlılıkların Yüklenmesi
 Proje dosyalarını klonladıktan sonra, bağımlılıkları yüklemek için aşağıdaki komutu çalıştırın:
 
-```bash
+
 npm install
 npm run dev ile projeyi başlat
 
